@@ -1,0 +1,98 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package php;
+
+import java.util.StringTokenizer;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+
+/**
+ *
+ * @author lucas
+ */
+public class AnalisadorLexico {
+    
+    	public static String token = "";
+        
+        String tmp = "<?php\n"
+                + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
+                + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
+                + "echo 'Seu salário é $650,00';            //seu salário é $650\n"
+                + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //seu salário é $650\n"
+                + "?>";
+		
+		//String temporaria para a tabela
+		String str;
+		
+		// --Configurações da tabela
+		//dados
+		String[] colunas = new String[]{"simbolo","tipo"};
+		String[][] simbolos = new String[][]{};
+		
+		//Tabela de simbolos
+		JTable tabelaSimbolos = new JTable();
+		DefaultTableModel model = new DefaultTableModel(simbolos,colunas);
+                
+                
+                //dicionário da linguagem php5
+                String[] dicionario = new String[]{"abstract","and","array()","as","break","case","catch","cfunction","class","clone",
+                "const","continue","declare","default","do","else","elseif","enddeclare","endfor","endforeach","endif","endswitch","endwhile",
+                "extends","final","for","foreach","function","global","goto","if","implements","interface","instanceof","namespace","new","\"",
+                "old_function","or","private","protected","public","static","switch","throw","try","use","var","while","xor","__CLASS__","'",
+                "__DIR__","__FILE__","__LINE__","__FUNCTION__","__METHOD__","__NAMESPACE__","die()","echo","empty()","exit()","eval()","include",
+                "include_once","isset()","list()","require","require_once","return","print","unset()"};
+		
+                String[] delimitadores = new String[]{";",",","//","<?php","?>","/*","*/"};
+                
+                String[] numeros = new String[]{"1","2","3","4","5","6","7","8","9","0"};
+                
+		char carac;
+		char caracTemp;
+		int senti = 0;
+                String cadeiaTokens = "";
+		String palavra = "";
+		String tipo = "";
+		String log = "errado";
+		
+		//Cadeia de caracteres com o programa fonte
+		StringTokenizer word = new StringTokenizer(tmp);
+                
+                
+                //cadeia de tokens todos juntos e separa os espaços em branco
+                while(word.hasMoreTokens()){
+  
+                    
+                        token = word.nextToken();
+                        for(int x=0;x<delimitadores.length;x++){
+                            
+                        
+                            if(token == delimitadores[x]){
+                                
+                                tipo = "delimitador";
+                                model.addRow(new String[]{token,tipo});
+                            }
+                            
+                            if(token == dicionario[x]){
+                                
+                                tipo = "Palavra Reservada";
+                                model.addRow(new String[]{token,tipo});
+                            }
+                            if(token == numeros[x]){
+                                tipo = "Dígitos numéricos";
+                                model.addRow(new String[]{token,tipo});
+                            }
+                        }        //"<"+word.nextToken()+">"    
+                 }
+                
+                
+                
+                
+    public static void main (String args[]){
+
+   }
+}
